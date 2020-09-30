@@ -6,11 +6,12 @@ const User = require('../models/User');
 // @access    Public
 exports.register_User = asyncHandler(async (req, res, next) => {
   console.log();
-  const { name, password } = req.body;
+  const { name, email, password } = req.body;
 
   // Create user
   const user = await User.create({
     name,
+    email,
     password,
   });
   res.status(200).json({
@@ -23,19 +24,19 @@ exports.register_User = asyncHandler(async (req, res, next) => {
 // @route     POST  /api/auth/login
 // @access    Public
 exports.login_User = asyncHandler(async (req, res, next) => {
-  const { name, password } = req.body;
+  const { email, password } = req.body;
   // Check if the fields are empty
-  if (!name || !password) {
+  if (!email || !password) {
     return next(
       res.status(400).json({
         success: false,
-        message: 'Please Provide Name and Password',
+        message: 'Please Provide Email and Password',
       })
     );
   }
 
   //Check the User exist or not
-  const isUser = await User.findOne({ name }).select('+password');
+  const isUser = await User.findOne({ email }).select('+password');
 
   if (!isUser) {
     return next(
