@@ -1,4 +1,5 @@
 const express = require('express');
+const errorHandler = require('./middleware/error');
 const dotenv = require('dotenv');
 const colors = require('colors');
 const morgan = require('morgan');
@@ -22,6 +23,9 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+//add errorHandler middleware;
+app.use(errorHandler);
 
 //Mount Routes
 app.use('/api/users', users);
